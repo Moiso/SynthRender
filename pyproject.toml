@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# --- PROJECT ABOUT ---
+[project]
+name = "synthrender"
+version = "0.3.0"
+description = "A Blender-based synthetic data render pipeline"
+readme = "README.md"
+requires-python = ">=3.11"
+
+# --- PROJECT FILE STRUCTURE ---
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["synthrender*"]
+namespaces = false
