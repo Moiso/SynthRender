@@ -1,0 +1,126 @@
+default_scene:      ""  # Path to default .blend scene
+output_dir:         ""  # Path to output location
+train_models_dir:   ""  # Path to folder with all the train models to load
+distractors_dir:    ""  # Path to folder with all the train models to load
+backgrounds_dir:    ""  # Path to folder with all the HDRs 
+planes_dir:         ""  # Path to folder with planes textures
+
+seed: 0                                                     # If seed is set to -1, it will be a random seed
+cycles_samples: 100                                         # By default it is set to 1024
+render_options: ["segmasks", "depth", "normals"]            # Possible render options: [segmasks, depth, normals]
+save_hdf5: True                                             # If enabled, saves the rendered data as an hdf5 file (Needed for coco and yolo annotations)
+save_raw: True                                              # If enabled, saves the rendered raw data separated in (rgb/, depth/, normals/, segmasks/)
+
+coco_to_yolo_category_mapping: {}
+
+# Dataload white lists:
+train_models_whitelist:         []
+distraction_models_whitelist:   []
+backgrounds_whitelist:          []
+planes_whitelist:               []
+
+# Dataload black lists:
+train_models_blacklist:         []
+distraction_models_blacklist:   []
+backgrounds_blacklist:          []
+planes_blacklist:               []
+
+physics:
+    simulate_physics: False                 # If enabled, simulates the physics.
+    simulate_actives: True                  # Sets train models as rigidbody active (can move and can collide with other rigidbodies).
+    simulate_passives: True                 # Sets the distractors as rigidbody passive (fixed but can collide with other rigidbodies).
+    reorientate_camera: True                # Recalculates the orientation of the camera to look towards the active objects.
+    default_scene_as_passives: True         # Enables pasive physics for the loaded models of the default scene.
+    create_ground_plane: True               # Create invisible ground so objects can fall on it.
+    max_simulation_time: 10                 # Simulation is accelerated: 1 simulation second != 1 real second (this depends on how slow is the simulation)
+    check_interval: 2                       # Interval at which check if objects stopped moving (In simulation seconds).
+    stopped_location_threshold: 0.5         # Minimum movement per second to be considered as stopped.
+    stopped_rotation_threshold: 2           # Minimum rotation per second to be considered as stopped.
+
+world:
+    background_light_strength: [0.01, 0.5]  # with steps of 0.01
+    default_background_img: ""
+    random_backgrounds: True
+
+lights:
+    lights_dir: [[0.323, -0.855, 0.405], [0.914, 0.028, 0.405], [-0.895, -0.186, 0.405]] # Three-point light directions.
+    light_size: 0.25
+    contrasts: [1, 1, 1]                # Energy multiplier for each light.
+    distance: 6
+    light_intensity: [0, 160]
+    randomize_color: True
+    exponential_lights: False
+    exponential_factor: 2.33
+
+camera:
+    resolution: [512, 512]
+    f-stop: [1, 16]                     # A higher fstop value makes the resulting image look sharper, while a low value decreases the sharpness.
+    sensor_size: 36                     # Sensor size in milimiters.
+    intrinsic_parameters_path: ""       # Path to a YAML file containing the camera intrinsic parameters matrix (k)
+    pos_shell_radius: [2, 3]
+    pos_shell_elevation: [10, 90]       # Angle in degrees (min and max)
+
+empty_object:
+    center: [0, 0, 0.5]
+    pos_shell_radius: [0, 1.5]
+    pos_shell_elevation: [0, 90]
+
+models:
+    trains:
+        sample_size: [-1, -1]               # If value is set to -1, it will be the maximum
+        scale: 1
+        n_copies: 0                         # Creates copies of loaded models. If the model has a custom n_copies value it will use the custom one.
+        dynamic_origin: True                # Uses the emtpy object as origin.
+        static_origin: [0, 0, 0.5]          # If "dynamic_origin" is False, it will use this location as fixed origin.
+        pos_min: [-0.5, -0.5, -0.5]         # Min value for x,y,z using origin as reference frame.
+        pos_max: [0.5, 0.5, 0.5]            # Max value of x,y,z using origin as reference frame.
+        rot_min: [0,0,0]                    # Angles in radians
+        rot_max: [3.1415, 3.1415, 3.1415]   # Angles in radians
+        keep_children: True                 # If true, keeps al the mesh models loaded with a common parent. Else, joins all the meshes into a single model.
+        do_convex_hull_decompose: False     # If true, runs convex hull decomposition.
+
+    distractors:
+        sample_size: [5, -1]                # If value is set to -1, it will be the maximum
+        scale: 1
+        n_copies: 0                         # Creates copies of loaded train_models. If the model has a custom n_copies value it will use the custom one.
+        pos_min: [-1.5, -1.5, 0]
+        pos_max: [1.5, 1.5, 0]
+        rot_min: [0, 0, 0]                  # Angles in radians
+        rot_max: [0, 0, 3.1415]             # Angles in radians
+        keep_children: True                 # If true, keeps al the mesh models loaded with a common parent. Else, joins all the meshes into a single model.
+        do_convex_hull_decompose: False     # If true, runs convex hull decomposition.
+
+fake_models:
+    trains:
+        sample_size: [-1, -1]               # If value is set to -1, it will be the maximum
+        scale: 1
+        n_copies: 0
+        simple_trains: 3                    # If bigger than 0, creates simple distractors that will replace train models.
+        similar_trains: 0                   # If bigger than 0, creates n deformed copies of each loaded train model.
+
+    distractors:
+        sample_size: [-1, -1]
+        scale: 1
+        n_copies: 0
+        simple_distractors: 20              # If bigger than 0, creates distractors with simple geometric shapes.
+
+plane:
+    simple_planes: 10
+    x_length: 6
+    y_length: 6
+
+custom_models:
+    example.obj:
+        scale: 0.001                        # Scale factor for the model.
+        n_copies: 4                         # Number of copies of the model.
+        keep_children: True                 # If true, keeps al the mesh models loaded with a common parent. Else, joins all the meshes into a single model.
+        do_convex_hull_decompose: False     # If true, runs convex hull decomposition.
+
+        meshes_ids: {"part1": 1, "partx": 25, "piece.001": 10}  # Applies a specific category id to a mesh
+        children_whitelist: []                                  # Childrens to load. (If empty, loads all of them)
+        children_blacklist: []                                  # Childrens to discard.
+        segment_whitelist:  []                                  # Childrens from which generate annotations. (If empty, loads all of them)
+        segment_blacklist:  []                                  # Childrens from which not generate annotations.
+
+
+

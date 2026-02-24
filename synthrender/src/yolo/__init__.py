@@ -1,0 +1,1 @@
+from synthrender.src.yolo.yolo_from_coco import coco2yolo

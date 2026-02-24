@@ -1,0 +1,1 @@
+from synthrender.src.png2mp4.mp4_merger import mp4Merger

@@ -1,0 +1,2 @@
+from synthrender.src.annotation.annotate_coco import Coco_Annotator
+from synthrender.src.annotation.annotate_bop import Bop_Annotator

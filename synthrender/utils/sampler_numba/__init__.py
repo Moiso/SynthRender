@@ -1,0 +1,5 @@
+CACHE_NUMBA = True
+
+from synthrender.utils.sampler_numba.collisions_utils import PlacedModelsNumba
+from synthrender.utils.sampler_numba.collisions_utils import check_bbox_intersect_numba
+from synthrender.utils.sampler_numba.sampler_utils import sample_pose_numba
