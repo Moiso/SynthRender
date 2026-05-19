@@ -13,6 +13,11 @@ This pipeline can create `segmentation masks`, `depth images` and `normal maps` 
 
 In order to work, a config_template.yaml with all the possible options is given.
 
+## Citation
+J. M. Araya-Martinez, T. Tom, A. S. Reig, P. R. Valiente, J. Lambrecht, and J. Krüger, 
+“Synthrender and iris: Open-source framework and dataset for bidirectional sim-real transfer in industrial object perception,”
+2026. [Online]. Available: https://arxiv.org/abs/2602.21141
+
 ## Quick Start
 
 First, clone this repository to your local machine.
@@ -173,3 +178,6 @@ The pipeline can also activate physic simulations for the loaded models. First c
 <p align="center">
     <img src="media/anim_small.gif" width=320>
 </p>
+
+## Contact
+For questions, please contact the corresponding authors of the paper.
